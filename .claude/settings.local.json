@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(powershell:*)",
+      "Bash(copy:*)",
+      "Bash(git --version)",
+      "Read(C:\\Users\\me\\OneDrive\\Desktop/**)",
+      "Bash(xcopy:*)",
+      "Bash(robocopy:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

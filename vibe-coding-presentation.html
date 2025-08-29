@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Coding - QUT Side Hustle</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        /* QUT Brand Colors */
+        .qut-blue { background: linear-gradient(135deg, #003f7f 0%, #0066cc 100%); }
+        .gradient-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .gradient-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .gradient-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .gradient-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .gradient-6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .gradient-7 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h3 {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .author {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 3rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-info {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 5px;
+            line-height: 1.3;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .tool-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .tool-icon img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+        }
+
+        .bullet-points {
+            text-align: left;
+            max-width: 800px;
+            margin: 2rem 0;
+        }
+
+        .bullet-points li {
+            font-size: 1.8rem;
+            margin: 1.5rem 0;
+            list-style: none;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .bullet-points li::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .demo-visual {
+            width: 400px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            margin: 2rem 0;
+        }
+
+        .linkedin-qr {
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 15px;
+            padding: 10px;
+            margin: 2rem 0;
+        }
+
+        .linkedin-qr img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: white;
+            z-index: 1000;
+        }
+
+        .punchy-text {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            max-width: 900px;
+        }
+
+        .learning-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 1rem 0;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: left;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .insights {
+            text-align: left;
+            max-width: 900px;
+            margin: 1rem 0;
+        }
+
+        .insights li {
+            font-size: 1.3rem;
+            margin: 0.8rem 0;
+            list-style: none;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .insights li::before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide.active * {
+            animation: fadeIn 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active qut-blue">
+            <h1>🚀 Vibe Coding</h1>
+            <div class="subtitle">Where possibilities are only limited by your imagination!</div>
+            <div class="author">Presented at QUT Side Hustle Program<br>Nathan Li</div>
+        </div>
+
+        <!-- Slide 2: What is Vibe Coding -->
+        <div class="slide qut-blue">
+            <h2>What is Vibe Coding?</h2>
+            <div class="punchy-text">
+                "Collaborative coding with AI assistants to build faster and learn continuously."
+            </div>
+            <ul class="bullet-points">
+                <li>Write code with natural language.</li>
+                <li>Prototype, Prototype, Prototype!</li>
+                <li>Learn and reiterate as you go.</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Tools Available -->
+        <div class="slide qut-blue">
+            <h2>Tools Available</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <img src="logos/claude-logo.svg" alt="Claude Code">
+                    </div>
+                    <h3>Claude Code</h3>
+                    <div class="pricing-info">
+                        Requires pro subscription<br>
+                        $20/month (Pro) - $200/month (Max)
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <img src="logos/chatgpt-logo.svg" alt="ChatGPT">
+                    </div>
+                    <h3>ChatGPT Codex</h3>
+                    <div class="pricing-info">
+                        Requires pro subscription<br>
+                        $20/month (Plus) - $200/month (Pro)
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <img src="logos/gemini-logo.svg" alt="Gemini CLI">
+                    </div>
+                    <h3>Gemini CLI</h3>
+                    <div class="pricing-info">
+                        Free for individuals<br>
+                        Enterprise pricing available
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <img src="logos/cursor-logo.svg" alt="Cursor">
+                    </div>
+                    <h3>Cursor</h3>
+                    <div class="pricing-info">
+                        Free tier available<br>
+                        $20/month (Pro) - $200/month (Ultra)
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <img src="logos/n8n-logo.svg" alt="n8n">
+                    </div>
+                    <h3>n8n</h3>
+                    <div class="pricing-info">
+                        Free self-hosted option<br>
+                        $24/month (Starter) - $50/month (Pro)
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <img src="logos/replit-logo.svg" alt="Replit">
+                    </div>
+                    <h3>Replit</h3>
+                    <div class="pricing-info">
+                        Free tier available<br>
+                        $15/month (Core) - $40/month (Teams)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: How Do You Do It -->
+        <div class="slide qut-blue">
+            <h2>How Do You Do It? - Claude Code</h2>
+            <ul class="bullet-points">
+                <li><strong>Install:</strong> npm install -g @anthropic-ai/claude-code 🤞</li>
+                <li><strong>Prompt:</strong> Say something nice 😉</li>
+                <li><strong>Check:</strong> It's like opening Xmas presents 🎉</li>
+                <li><strong>Rinse and Repeat</strong></li>
+            </ul>
+        </div>
+
+        <!-- Slide 5: Show and Tell -->
+        <div class="slide qut-blue">
+            <h2>Show and Tell</h2>
+            <div class="demo-visual">🛠️</div>
+            <div class="subtitle">Shall we build something together?</div>
+        </div>
+
+        <!-- Slide 6: What I Learned -->
+        <div class="slide qut-blue">
+            <h2>What I learned?</h2>
+            <div class="subtitle">in past 2 weeks</div>
+            <div class="learning-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <img src="logos/excel-logo.svg" alt="Microsoft Excel">
+                    </div>
+                    <h3>Timesheet Automation</h3>
+                    <div class="pricing-info">
+                        Automated boring paperwork in 4 hours
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <img src="logos/dumbbell-logo.svg" alt="Workout Tracker">
+                    </div>
+                    <h3>Workout Tracker</h3>
+                    <div class="pricing-info">
+                        My personal gym tracker in 8 hours
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <img src="logos/powershell-logo.svg" alt="PowerShell">
+                    </div>
+                    <h3>Analysis Scripts</h3>
+                    <div class="pricing-info">
+                        Saving $ for work
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <img src="logos/presentation-logo.svg" alt="Presentation">
+                    </div>
+                    <h3>This Presentation</h3>
+                    <div class="pricing-info">
+                        Is created with Claude Code
+                    </div>
+                </div>
+            </div>
+            <ul class="insights">
+                <li>Prompt Quality = App Quality</li>
+                <li>Mistakes are common - guide them</li>
+                <li>Possibilities limited by imagination</li>
+                <li>Treat AI assistants with respect</li>
+            </ul>
+        </div>
+
+        <!-- Slide 7: Q&A -->
+        <div class="slide qut-blue">
+            <h2>Questions & Discussion</h2>
+            <div class="linkedin-qr">
+                <img src="IMG_9353.jpeg" alt="LinkedIn QR Code - Nathan Li">
+            </div>
+            <div class="subtitle">Let's explore Vibe Coding together!</div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">7</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">←</button>
+        <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Touch/swipe navigation for mobile
+        let startX = null;
+        document.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            if (startX === null) return;
+            
+            const endX = e.changedTouches[0].clientX;
+            const diff = startX - endX;
+            
+            if (Math.abs(diff) > 50) { // Minimum swipe distance
+                if (diff > 0) {
+                    nextSlide(); // Swipe left = next slide
+                } else {
+                    previousSlide(); // Swipe right = previous slide
+                }
+            }
+            
+            startX = null;
+        });
+    </script>
+</body>
+</html>
