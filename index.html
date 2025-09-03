@@ -606,12 +606,25 @@
             showSlide(currentSlide - 1);
         }
 
-        // Keyboard navigation
+        // Keyboard navigation - updated to handle modal state
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                nextSlide();
-            } else if (e.key === 'ArrowLeft') {
-                previousSlide();
+            const modal = document.getElementById('toolModal');
+            const isModalOpen = modal && modal.style.display === 'block';
+            
+            if (e.key === 'Escape') {
+                if (isModalOpen) {
+                    closeModal();
+                }
+            } else if (isModalOpen && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                e.preventDefault(); // Prevent slide navigation
+                navigateModal(e.key === 'ArrowRight' ? 1 : -1);
+            } else if (!isModalOpen) {
+                // Only handle slide navigation when modal is closed
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    previousSlide();
+                }
             }
         });
 
@@ -828,18 +841,6 @@
         const toolOrder = ['claude', 'chatgpt', 'gemini', 'cursor', 'replit', 'n8n'];
         const projectOrder = ['timesheet', 'workout', 'presentation', 'openday'];
 
-        // Enhanced keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            const modal = document.getElementById('toolModal');
-            const isModalOpen = modal.style.display === 'block';
-            
-            if (e.key === 'Escape') {
-                closeModal();
-            } else if (isModalOpen && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
-                e.preventDefault(); // Prevent slide navigation
-                navigateModal(e.key === 'ArrowRight' ? 1 : -1);
-            }
-        });
 
         function navigateModal(direction) {
             if (!currentModalTool || !currentModalContext) return;
