@@ -112,6 +112,7 @@
 
         .tool-card:hover {
             transform: translateY(-10px);
+            cursor: pointer;
         }
 
         .tool-icon {
@@ -280,6 +281,103 @@
         .slide.active * {
             animation: fadeIn 0.8s ease-out;
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            color: white;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .close {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .modal-screenshot {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-description {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .modal-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .modal-features li {
+            font-size: 1rem;
+            margin: 8px 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .modal-features li::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
     </style>
 </head>
 <body>
@@ -321,7 +419,7 @@
         <div class="slide qut-blue">
             <h2>Tools Available</h2>
             <div class="tools-grid">
-                <div class="tool-card">
+                <div class="tool-card" onclick="openModal('claude')">
                     <div class="tool-icon">
                         <img src="logos/claude-logo.svg" alt="Claude Code">
                     </div>
@@ -331,7 +429,7 @@
                         $20/month (Pro) - $200/month (Max)
                     </div>
                 </div>
-                <div class="tool-card">
+                <div class="tool-card" onclick="openModal('chatgpt')">
                     <div class="tool-icon">
                         <img src="logos/chatgpt-logo.svg" alt="ChatGPT">
                     </div>
@@ -341,7 +439,7 @@
                         $20/month (Plus) - $200/month (Pro)
                     </div>
                 </div>
-                <div class="tool-card">
+                <div class="tool-card" onclick="openModal('gemini')">
                     <div class="tool-icon">
                         <img src="logos/gemini-logo.svg" alt="Gemini CLI">
                     </div>
@@ -351,7 +449,7 @@
                         Enterprise pricing available
                     </div>
                 </div>
-                <div class="tool-card">
+                <div class="tool-card" onclick="openModal('cursor')">
                     <div class="tool-icon">
                         <img src="logos/cursor-logo.svg" alt="Cursor">
                     </div>
@@ -361,7 +459,7 @@
                         $20/month (Pro) - $200/month (Ultra)
                     </div>
                 </div>
-                <div class="tool-card">
+                <div class="tool-card" onclick="openModal('replit')">
                     <div class="tool-icon">
                         <img src="logos/replit-logo.svg" alt="Replit">
                     </div>
@@ -371,7 +469,7 @@
                         $15/month (Core) - $40/month (Teams)
                     </div>
                 </div>
-                <div class="tool-card">
+                <div class="tool-card" onclick="openModal('n8n')">
                     <div class="tool-icon">
                         <img src="logos/n8n-logo.svg" alt="n8n">
                     </div>
@@ -524,6 +622,130 @@
             
             startX = null;
         });
+
+        // Modal functionality
+        const toolData = {
+            claude: {
+                title: "Claude Code",
+                description: "Anthropic's official CLI for Claude, enabling AI-powered coding directly in your terminal.",
+                features: [
+                    "Direct terminal integration with Claude AI",
+                    "File reading, editing, and creation capabilities", 
+                    "Real-time collaboration with AI assistant",
+                    "Supports multiple programming languages",
+                    "Advanced reasoning for complex coding tasks"
+                ]
+            },
+            chatgpt: {
+                title: "ChatGPT Codex",
+                description: "OpenAI's code-generation model integrated into various development environments.",
+                features: [
+                    "Natural language to code translation",
+                    "Code explanation and documentation",
+                    "Bug detection and fixing suggestions",
+                    "Multiple programming language support",
+                    "Integration with popular IDEs"
+                ]
+            },
+            gemini: {
+                title: "Google Gemini CLI",
+                description: "Google's multimodal AI assistant accessible through command line interface.",
+                features: [
+                    "Free for individual developers",
+                    "Multimodal capabilities (text, images, code)",
+                    "Long context window for large codebases",
+                    "Integration with Google Cloud services",
+                    "Advanced reasoning capabilities"
+                ]
+            },
+            cursor: {
+                title: "Cursor IDE",
+                description: "AI-powered code editor built for programming with artificial intelligence.",
+                features: [
+                    "Built-in AI chat and code generation",
+                    "Intelligent code completion",
+                    "Codebase-aware AI assistance",
+                    "Seamless GitHub integration",
+                    "Privacy-focused AI interactions"
+                ]
+            },
+            replit: {
+                title: "Replit",
+                description: "Browser-based IDE with AI-powered coding assistance and collaborative features.",
+                features: [
+                    "Zero-setup development environment",
+                    "Real-time collaboration",
+                    "AI code generation and completion",
+                    "Instant deployment and hosting",
+                    "Support for 50+ programming languages"
+                ]
+            },
+            n8n: {
+                title: "n8n",
+                description: "Workflow automation platform with AI integrations for coding and data processing.",
+                features: [
+                    "Visual workflow designer",
+                    "200+ integrations available",
+                    "AI-powered automation workflows",
+                    "Self-hosted option available",
+                    "Code-free and code-friendly options"
+                ]
+            }
+        };
+
+        function openModal(tool) {
+            const modal = document.getElementById('toolModal');
+            const data = toolData[tool];
+            
+            document.getElementById('modalTitle').textContent = data.title;
+            document.getElementById('modalDescription').textContent = data.description;
+            
+            const featuresList = document.getElementById('modalFeatures');
+            featuresList.innerHTML = '';
+            data.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = feature;
+                featuresList.appendChild(li);
+            });
+            
+            // Show placeholder for screenshot
+            const screenshot = document.getElementById('modalScreenshot');
+            screenshot.textContent = '📸 Screenshot Coming Soon';
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('toolModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('toolModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
     </script>
+
+    <!-- Tool Modal -->
+    <div id="toolModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle" class="modal-title"></h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalScreenshot" class="modal-screenshot">📸 Screenshot Coming Soon</div>
+            <p id="modalDescription" class="modal-description"></p>
+            <ul id="modalFeatures" class="modal-features"></ul>
+        </div>
+    </div>
 </body>
 </html>
