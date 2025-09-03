@@ -613,11 +613,16 @@
             
             if (e.key === 'Escape') {
                 if (isModalOpen) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     closeModal();
                 }
             } else if (isModalOpen && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
-                e.preventDefault(); // Prevent slide navigation
+                e.preventDefault(); // Prevent default browser behavior
+                e.stopPropagation(); // Stop event from bubbling up
+                e.stopImmediatePropagation(); // Stop other listeners
                 navigateModal(e.key === 'ArrowRight' ? 1 : -1);
+                return false; // Additional prevention
             } else if (!isModalOpen) {
                 // Only handle slide navigation when modal is closed
                 if (e.key === 'ArrowRight' || e.key === ' ') {
