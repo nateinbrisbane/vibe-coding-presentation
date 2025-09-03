@@ -354,6 +354,14 @@
             color: rgba(255, 255, 255, 0.3);
         }
 
+        .modal-screenshot img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .modal-description {
             font-size: 1.1rem;
             line-height: 1.5;
@@ -627,6 +635,7 @@
         const toolData = {
             claude: {
                 title: "Claude Code",
+                screenshot: "screenshots/claude.png",
                 description: "Anthropic's official CLI for Claude, enabling AI-powered coding directly in your terminal.",
                 features: [
                     "Direct terminal integration with Claude AI",
@@ -638,6 +647,7 @@
             },
             chatgpt: {
                 title: "ChatGPT Codex",
+                screenshot: "screenshots/codex.png",
                 description: "OpenAI's code-generation model integrated into various development environments.",
                 features: [
                     "Natural language to code translation",
@@ -649,6 +659,7 @@
             },
             gemini: {
                 title: "Google Gemini CLI",
+                screenshot: "screenshots/gemini.png",
                 description: "Google's multimodal AI assistant accessible through command line interface.",
                 features: [
                     "Free for individual developers",
@@ -660,6 +671,7 @@
             },
             cursor: {
                 title: "Cursor IDE",
+                screenshot: "screenshots/cursor.png",
                 description: "AI-powered code editor built for programming with artificial intelligence.",
                 features: [
                     "Built-in AI chat and code generation",
@@ -671,6 +683,7 @@
             },
             replit: {
                 title: "Replit",
+                screenshot: "screenshots/replit.png",
                 description: "Browser-based IDE with AI-powered coding assistance and collaborative features.",
                 features: [
                     "Zero-setup development environment",
@@ -682,6 +695,7 @@
             },
             n8n: {
                 title: "n8n",
+                screenshot: "screenshots/n8n.png",
                 description: "Workflow automation platform with AI integrations for coding and data processing.",
                 features: [
                     "Visual workflow designer",
@@ -708,9 +722,9 @@
                 featuresList.appendChild(li);
             });
             
-            // Show placeholder for screenshot
+            // Display actual screenshot
             const screenshot = document.getElementById('modalScreenshot');
-            screenshot.textContent = '📸 Screenshot Coming Soon';
+            screenshot.innerHTML = `<img src="${data.screenshot}" alt="${data.title} Screenshot" />`;
             
             modal.style.display = 'block';
         }

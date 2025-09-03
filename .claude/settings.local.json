@@ -7,7 +7,11 @@
       "Bash(git --version)",
       "Read(C:\\Users\\me\\OneDrive\\Desktop/**)",
       "Bash(xcopy:*)",
-      "Bash(robocopy:*)"
+      "Bash(robocopy:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(dir screenshots)"
     ],
     "deny": [],
     "ask": []
