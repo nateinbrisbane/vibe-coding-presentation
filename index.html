@@ -386,6 +386,25 @@
             left: 0;
             top: 0;
         }
+
+        .modal-navigation-hint {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-align: center;
+        }
+
+        .modal-navigation-hint kbd {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            margin: 0 2px;
+        }
     </style>
 </head>
 <body>
@@ -743,13 +762,26 @@
             }
         };
 
-        function openModal(tool) {
+        function openModal(tool, context = null) {
             const modal = document.getElementById('toolModal');
             const data = toolData[tool];
             
             if (!data) {
                 console.error('Tool data not found for:', tool);
                 return;
+            }
+            
+            // Set modal navigation state
+            currentModalTool = tool;
+            if (context) {
+                currentModalContext = context;
+            } else {
+                // Auto-detect context based on tool
+                if (toolOrder.includes(tool)) {
+                    currentModalContext = 'tools';
+                } else if (projectOrder.includes(tool)) {
+                    currentModalContext = 'projects';
+                }
             }
             
             document.getElementById('modalTitle').textContent = data.title;
@@ -776,6 +808,8 @@
 
         function closeModal() {
             document.getElementById('toolModal').style.display = 'none';
+            currentModalTool = null;
+            currentModalContext = null;
         }
 
         // Close modal when clicking outside of it
@@ -786,12 +820,43 @@
             }
         }
 
-        // Close modal with Escape key
+        // Modal navigation state
+        let currentModalTool = null;
+        let currentModalContext = null; // 'tools' for page 4, 'projects' for page 7
+        
+        // Define tool and project orders
+        const toolOrder = ['claude', 'chatgpt', 'gemini', 'cursor', 'replit', 'n8n'];
+        const projectOrder = ['timesheet', 'workout', 'presentation', 'openday'];
+
+        // Enhanced keyboard navigation
         document.addEventListener('keydown', function(e) {
+            const modal = document.getElementById('toolModal');
+            const isModalOpen = modal.style.display === 'block';
+            
             if (e.key === 'Escape') {
                 closeModal();
+            } else if (isModalOpen && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                e.preventDefault(); // Prevent slide navigation
+                navigateModal(e.key === 'ArrowRight' ? 1 : -1);
             }
         });
+
+        function navigateModal(direction) {
+            if (!currentModalTool || !currentModalContext) return;
+            
+            const order = currentModalContext === 'tools' ? toolOrder : projectOrder;
+            const currentIndex = order.indexOf(currentModalTool);
+            
+            if (currentIndex === -1) return;
+            
+            // Calculate next index with wrapping
+            let nextIndex = currentIndex + direction;
+            if (nextIndex >= order.length) nextIndex = 0;
+            if (nextIndex < 0) nextIndex = order.length - 1;
+            
+            const nextTool = order[nextIndex];
+            openModal(nextTool, currentModalContext);
+        }
     </script>
 
     <!-- Tool Modal -->
@@ -804,6 +869,9 @@
             <div id="modalScreenshot" class="modal-screenshot"></div>
             <p id="modalDescription" class="modal-description"></p>
             <ul id="modalFeatures" class="modal-features"></ul>
+            <div class="modal-navigation-hint">
+                <kbd>←</kbd> <kbd>→</kbd> Navigate • <kbd>ESC</kbd> Close
+            </div>
         </div>
     </div>
 </body>
