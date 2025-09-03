@@ -513,40 +513,34 @@
             <h2>What I learned?</h2>
             <div class="subtitle">in past 2 weeks</div>
             <div class="learning-grid">
-                <div class="tool-card">
+                <div class="tool-card" onclick="openModal('timesheet')">
                     <div class="tool-icon">
                         <img src="logos/excel-logo.svg" alt="Microsoft Excel">
                     </div>
                     <h3>Timesheet Automation</h3>
-                    <div class="pricing-info">
-                        Automated boring paperwork in 4 hours
-                    </div>
                 </div>
-                <div class="tool-card">
+                <div class="tool-card" onclick="openModal('workout')">
                     <div class="tool-icon">
                         <img src="logos/dumbbell-logo.svg" alt="Workout Tracker">
                     </div>
                     <h3>Workout Tracker</h3>
-                    <div class="pricing-info">
-                        My personal gym tracker in 8 hours
-                    </div>
                 </div>
-                <div class="tool-card">
-                    <div class="tool-icon">
-                        <img src="logos/powershell-logo.svg" alt="PowerShell">
-                    </div>
-                    <h3>Analysis Scripts</h3>
-                    <div class="pricing-info">
-                        Saving $ for work
-                    </div>
-                </div>
-                <div class="tool-card">
+                <div class="tool-card" onclick="openModal('presentation')">
                     <div class="tool-icon">
                         <img src="logos/presentation-logo.svg" alt="Presentation">
                     </div>
                     <h3>This Presentation</h3>
                     <div class="pricing-info">
                         Is created with Claude Code
+                    </div>
+                </div>
+                <div class="tool-card" onclick="openModal('openday')">
+                    <div class="tool-icon">
+                        <img src="logos/powershell-logo.svg" alt="PowerShell">
+                    </div>
+                    <h3>Open Day</h3>
+                    <div class="pricing-info">
+                        Interactive presentation features
                     </div>
                 </div>
             </div>
@@ -703,6 +697,54 @@
                     "AI-powered automation workflows",
                     "Self-hosted option available",
                     "Code-free and code-friendly options"
+                ]
+            },
+            timesheet: {
+                title: "Timesheet Automation",
+                screenshot: "screenshots/timesheet.png",
+                description: "Automated Excel-based timesheet system that eliminated manual paperwork and data entry.",
+                features: [
+                    "Automated boring paperwork in 4 hours",
+                    "Excel VBA macros for data processing",
+                    "Integration with existing HR systems",
+                    "Real-time validation and error checking",
+                    "Saved 2+ hours per week of manual work"
+                ]
+            },
+            workout: {
+                title: "Workout Tracker",
+                screenshot: "screenshots/workout.png", 
+                description: "Personal gym tracking application built to monitor workouts, progress, and fitness goals.",
+                features: [
+                    "Personal gym tracker built in 8 hours",
+                    "Exercise logging and progress tracking",
+                    "Custom workout routine builder",
+                    "Progress visualization and analytics",
+                    "Mobile-friendly responsive design"
+                ]
+            },
+            presentation: {
+                title: "This Presentation",
+                screenshot: "screenshots/presentation.png",
+                description: "This interactive presentation itself was created using Claude Code as a demonstration of vibe coding.",
+                features: [
+                    "Created entirely with Claude Code",
+                    "HTML5 with embedded CSS and JavaScript",
+                    "Interactive modal popups for tool details",
+                    "Responsive design for all devices",
+                    "Professional glassmorphism styling"
+                ]
+            },
+            openday: {
+                title: "Open Day",
+                screenshot: "screenshots/openday.png",
+                description: "Interactive presentation features developed for today's QUT Side Hustle Open Day event.",
+                features: [
+                    "Interactive presentation features",
+                    "Real-time tool demonstrations", 
+                    "Audience engagement elements",
+                    "Live coding showcase capabilities",
+                    "Educational content for aspiring developers"
                 ]
             }
         };
