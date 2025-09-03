@@ -711,6 +711,11 @@
             const modal = document.getElementById('toolModal');
             const data = toolData[tool];
             
+            if (!data) {
+                console.error('Tool data not found for:', tool);
+                return;
+            }
+            
             document.getElementById('modalTitle').textContent = data.title;
             document.getElementById('modalDescription').textContent = data.description;
             
@@ -724,7 +729,11 @@
             
             // Display actual screenshot
             const screenshot = document.getElementById('modalScreenshot');
-            screenshot.innerHTML = `<img src="${data.screenshot}" alt="${data.title} Screenshot" />`;
+            if (data.screenshot) {
+                screenshot.innerHTML = `<img src="${data.screenshot}" alt="${data.title} Screenshot" onerror="this.style.display='none'; this.parentNode.innerHTML='📸 Screenshot not available';" />`;
+            } else {
+                screenshot.innerHTML = '📸 Screenshot not available';
+            }
             
             modal.style.display = 'block';
         }
@@ -756,7 +765,7 @@
                 <h2 id="modalTitle" class="modal-title"></h2>
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
-            <div id="modalScreenshot" class="modal-screenshot">📸 Screenshot Coming Soon</div>
+            <div id="modalScreenshot" class="modal-screenshot"></div>
             <p id="modalDescription" class="modal-description"></p>
             <ul id="modalFeatures" class="modal-features"></ul>
         </div>
