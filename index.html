@@ -587,10 +587,10 @@
         <div class="slide qut-blue">
             <h2>Lessons?</h2>
             <ul class="insights">
-                <li>Prompt Quality = App Quality</li>
-                <li>Mistakes are common - guide them</li>
-                <li>Possibilities limited by imagination</li>
-                <li>Treat AI assistants with respect</li>
+                <li id="bullet-8-1" style="display: none;">Prompt Quality = App Quality</li>
+                <li id="bullet-8-2" style="display: none;">Mistakes are common - guide them</li>
+                <li id="bullet-8-3" style="display: none;">Possibilities limited by imagination</li>
+                <li id="bullet-8-4" style="display: none;">Treat AI assistants with respect</li>
             </ul>
         </div>
 
@@ -642,6 +642,7 @@
         // Animation states for slides
         let slide3Animated = false;
         let slide6BulletIndex = 0; // Track which bullet to show next
+        let slide8BulletIndex = 0; // Track which bullet to show next
 
         function triggerSlideAnimation() {
             if (currentSlide === 2 && !slide3Animated) { 
@@ -656,6 +657,14 @@
                     const bulletId = `bullet-6-${slide6BulletIndex + 1}`;
                     document.getElementById(bulletId).classList.add('reveal-bullet');
                     slide6BulletIndex++;
+                    return true; // Animation triggered
+                }
+            } else if (currentSlide === 7) { 
+                // Slide 8 animation (index 7)
+                if (slide8BulletIndex < 4) {
+                    const bulletId = `bullet-8-${slide8BulletIndex + 1}`;
+                    document.getElementById(bulletId).classList.add('reveal-bullet');
+                    slide8BulletIndex++;
                     return true; // Animation triggered
                 }
             }
@@ -676,6 +685,14 @@
                     document.getElementById(bulletId).classList.remove('reveal-bullet');
                 }
                 slide6BulletIndex = 0;
+            }
+            // Reset slide 8
+            if (currentSlide === 7) {
+                for (let i = 1; i <= 4; i++) {
+                    const bulletId = `bullet-8-${i}`;
+                    document.getElementById(bulletId).classList.remove('reveal-bullet');
+                }
+                slide8BulletIndex = 0;
             }
         }
 
