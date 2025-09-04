@@ -621,10 +621,8 @@
         document.getElementById('total-slides').textContent = totalSlides;
 
         function showSlide(n) {
-            // Reset slide 3 animation when leaving it
-            if (currentSlide === 2) {
-                resetSlide3Animation();
-            }
+            // Reset slide animations when leaving
+            resetSlideAnimations();
             
             slides[currentSlide].classList.remove('active');
             currentSlide = (n + totalSlides) % totalSlides;
