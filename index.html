@@ -638,26 +638,36 @@
         function handleSlideAnimation(direction) {
             const slideIndex = currentSlide;
             
-            // Only handle animation for slide 3 (index 2)
+            // Only handle animation for slide 3 (index 2)  
             if (slideIndex !== 2 || !slideStates[slideIndex]) {
                 return false; // Let normal navigation continue
             }
             
             const state = slideStates[slideIndex];
             
-            if (direction === 'next' && state.step < state.maxSteps) {
-                // Perform animation step
-                performSlideStep(slideIndex, state.step);
-                state.step++;
-                return true; // Animation handled, don't navigate
-            } else if (direction === 'prev' && state.step > 0) {
-                // Reverse animation step
-                state.step--;
-                reverseSlideStep(slideIndex, state.step);
-                return true; // Animation handled, don't navigate
+            if (direction === 'next') {
+                if (state.step < state.maxSteps) {
+                    // Perform animation step
+                    performSlideStep(slideIndex, state.step);
+                    state.step++;
+                    return true; // Animation handled, don't navigate
+                } else {
+                    // Animation complete, allow navigation to next slide
+                    return false;
+                }
+            } else if (direction === 'prev') {
+                if (state.step > 0) {
+                    // Reverse animation step
+                    state.step--;
+                    reverseSlideStep(slideIndex, state.step);
+                    return true; // Animation handled, don't navigate
+                } else {
+                    // At beginning, allow navigation to previous slide
+                    return false;
+                }
             }
             
-            return false; // No animation, allow normal navigation
+            return false; // Default: allow normal navigation
         }
 
         function performSlideStep(slideIndex, step) {
@@ -716,11 +726,15 @@
             } else if (!isModalOpen) {
                 // Handle slide navigation and animations when modal is closed
                 if (e.key === 'ArrowRight' || e.key === ' ') {
-                    if (!handleSlideAnimation('next')) {
+                    const handled = handleSlideAnimation('next');
+                    console.log('Right arrow - Animation handled:', handled, 'Current slide:', currentSlide);
+                    if (!handled) {
                         nextSlide();
                     }
                 } else if (e.key === 'ArrowLeft') {
-                    if (!handleSlideAnimation('prev')) {
+                    const handled = handleSlideAnimation('prev');
+                    console.log('Left arrow - Animation handled:', handled, 'Current slide:', currentSlide);
+                    if (!handled) {
                         previousSlide();
                     }
                 }
