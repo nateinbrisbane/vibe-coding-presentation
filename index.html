@@ -621,6 +621,11 @@
         document.getElementById('total-slides').textContent = totalSlides;
 
         function showSlide(n) {
+            // Reset slide 3 animation when leaving it
+            if (currentSlide === 2) {
+                resetSlide3Animation();
+            }
+            
             slides[currentSlide].classList.remove('active');
             currentSlide = (n + totalSlides) % totalSlides;
             slides[currentSlide].classList.add('active');
@@ -634,6 +639,27 @@
 
         function previousSlide() {
             showSlide(currentSlide - 1);
+        }
+
+        // Simple slide 3 animation state
+        let slide3Animated = false;
+
+        function triggerSlide3Animation() {
+            if (currentSlide === 2 && !slide3Animated) { // Slide 3 (index 2)
+                // Strike through tagline and reveal bullet
+                document.getElementById('vibe-definition').classList.add('strikethrough');
+                document.getElementById('first-bullet').classList.add('reveal-bullet');
+                slide3Animated = true;
+                return true; // Animation triggered
+            }
+            return false; // No animation
+        }
+
+        function resetSlide3Animation() {
+            // Reset animation when leaving slide 3
+            document.getElementById('vibe-definition').classList.remove('strikethrough');
+            document.getElementById('first-bullet').classList.remove('reveal-bullet');
+            slide3Animated = false;
         }
 
         // Keyboard navigation - updated to handle modal state and slide animations
@@ -656,7 +682,10 @@
             } else if (!isModalOpen) {
                 // Only handle slide navigation when modal is closed
                 if (e.key === 'ArrowRight' || e.key === ' ') {
-                    nextSlide();
+                    // Try animation first, if no animation then navigate
+                    if (!triggerSlide3Animation()) {
+                        nextSlide();
+                    }
                 } else if (e.key === 'ArrowLeft') {
                     previousSlide();
                 }
