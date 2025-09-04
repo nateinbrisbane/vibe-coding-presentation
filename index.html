@@ -726,17 +726,19 @@
             } else if (!isModalOpen) {
                 // Handle slide navigation and animations when modal is closed
                 if (e.key === 'ArrowRight' || e.key === ' ') {
-                    const handled = handleSlideAnimation('next');
-                    console.log('Right arrow - Animation handled:', handled, 'Current slide:', currentSlide);
-                    if (!handled) {
+                    // Temporarily disable animation for debugging
+                    // const handled = handleSlideAnimation('next');
+                    // console.log('Right arrow - Animation handled:', handled, 'Current slide:', currentSlide);
+                    // if (!handled) {
                         nextSlide();
-                    }
+                    // }
                 } else if (e.key === 'ArrowLeft') {
-                    const handled = handleSlideAnimation('prev');
-                    console.log('Left arrow - Animation handled:', handled, 'Current slide:', currentSlide);
-                    if (!handled) {
+                    // Temporarily disable animation for debugging  
+                    // const handled = handleSlideAnimation('prev');
+                    // console.log('Left arrow - Animation handled:', handled, 'Current slide:', currentSlide);
+                    // if (!handled) {
                         previousSlide();
-                    }
+                    // }
                 }
             }
         });
