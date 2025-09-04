@@ -568,10 +568,11 @@
         <div class="slide qut-blue">
             <h2>How?</h2>
             <ul class="bullet-points">
-                <li><strong>Install:</strong> npm install -g @anthropic-ai/claude-code 🤞</li>
-                <li><strong>Prompt:</strong> Say something nice 😉</li>
-                <li><strong>Check:</strong> It's like opening Xmas presents 🎉</li>
-                <li><strong>Rinse and Repeat</strong></li>
+                <li id="bullet-6-1" style="display: none;"><strong>Install:</strong> npm install -g @anthropic-ai/claude-code 🤞</li>
+                <li id="bullet-6-2" style="display: none;"><strong>Run:</strong> claude</li>
+                <li id="bullet-6-3" style="display: none;"><strong>Prompt:</strong> Say something nice 😉</li>
+                <li id="bullet-6-4" style="display: none;"><strong>Check:</strong> It's like opening Xmas presents 🎉</li>
+                <li id="bullet-6-5" style="display: none;"><strong>Rinse and Repeat</strong></li>
             </ul>
         </div>
 
@@ -640,25 +641,44 @@
             showSlide(currentSlide - 1);
         }
 
-        // Simple slide 3 animation state
+        // Animation states for slides
         let slide3Animated = false;
+        let slide6BulletIndex = 0; // Track which bullet to show next
 
-        function triggerSlide3Animation() {
-            if (currentSlide === 2 && !slide3Animated) { // Slide 3 (index 2)
-                // Strike through tagline and reveal bullet
+        function triggerSlideAnimation() {
+            if (currentSlide === 2 && !slide3Animated) { 
+                // Slide 3 animation
                 document.getElementById('vibe-definition').classList.add('strikethrough');
                 document.getElementById('first-bullet').classList.add('reveal-bullet');
                 slide3Animated = true;
                 return true; // Animation triggered
+            } else if (currentSlide === 5) { 
+                // Slide 6 animation (index 5)
+                if (slide6BulletIndex < 5) {
+                    const bulletId = `bullet-6-${slide6BulletIndex + 1}`;
+                    document.getElementById(bulletId).classList.add('reveal-bullet');
+                    slide6BulletIndex++;
+                    return true; // Animation triggered
+                }
             }
             return false; // No animation
         }
 
-        function resetSlide3Animation() {
-            // Reset animation when leaving slide 3
-            document.getElementById('vibe-definition').classList.remove('strikethrough');
-            document.getElementById('first-bullet').classList.remove('reveal-bullet');
-            slide3Animated = false;
+        function resetSlideAnimations() {
+            // Reset slide 3
+            if (currentSlide === 2) {
+                document.getElementById('vibe-definition').classList.remove('strikethrough');
+                document.getElementById('first-bullet').classList.remove('reveal-bullet');
+                slide3Animated = false;
+            }
+            // Reset slide 6
+            if (currentSlide === 5) {
+                for (let i = 1; i <= 5; i++) {
+                    const bulletId = `bullet-6-${i}`;
+                    document.getElementById(bulletId).classList.remove('reveal-bullet');
+                }
+                slide6BulletIndex = 0;
+            }
         }
 
         // Keyboard navigation - updated to handle modal state and slide animations
@@ -682,7 +702,7 @@
                 // Only handle slide navigation when modal is closed
                 if (e.key === 'ArrowRight' || e.key === ' ') {
                     // Try animation first, if no animation then navigate
-                    if (!triggerSlide3Animation()) {
+                    if (!triggerSlideAnimation()) {
                         nextSlide();
                     }
                 } else if (e.key === 'ArrowLeft') {
