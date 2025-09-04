@@ -619,84 +619,14 @@
         const totalSlides = slides.length;
 
         document.getElementById('total-slides').textContent = totalSlides;
-        
-        // Initialize slide animation states
-        initializeSlideStates();
 
         function showSlide(n) {
             slides[currentSlide].classList.remove('active');
             currentSlide = (n + totalSlides) % totalSlides;
             slides[currentSlide].classList.add('active');
             document.getElementById('current-slide').textContent = currentSlide + 1;
-            
-            // Reset slide animation state when changing slides
-            if (slideStates[currentSlide]) {
-                resetSlideAnimation(currentSlide);
-            }
         }
 
-        function handleSlideAnimation(direction) {
-            const slideIndex = currentSlide;
-            
-            // Only handle animation for slide 3 (index 2)  
-            if (slideIndex !== 2 || !slideStates[slideIndex]) {
-                return false; // Let normal navigation continue
-            }
-            
-            const state = slideStates[slideIndex];
-            
-            if (direction === 'next') {
-                if (state.step < state.maxSteps) {
-                    // Perform animation step
-                    performSlideStep(slideIndex, state.step);
-                    state.step++;
-                    return true; // Animation handled, don't navigate
-                } else {
-                    // Animation complete, allow navigation to next slide
-                    return false;
-                }
-            } else if (direction === 'prev') {
-                if (state.step > 0) {
-                    // Reverse animation step
-                    state.step--;
-                    reverseSlideStep(slideIndex, state.step);
-                    return true; // Animation handled, don't navigate
-                } else {
-                    // At beginning, allow navigation to previous slide
-                    return false;
-                }
-            }
-            
-            return false; // Default: allow normal navigation
-        }
-
-        function performSlideStep(slideIndex, step) {
-            if (slideIndex === 2) { // Slide 3: "What is Vibe Coding?"
-                if (step === 0) {
-                    // Step 1: Strike through the tagline and reveal the bullet
-                    document.getElementById('vibe-definition').classList.add('strikethrough');
-                    document.getElementById('first-bullet').classList.add('reveal-bullet');
-                }
-            }
-        }
-
-        function reverseSlideStep(slideIndex, step) {
-            if (slideIndex === 2) { // Slide 3: "What is Vibe Coding?"
-                if (step === 0) {
-                    // Reverse step 1: Remove strikethrough and hide bullet
-                    document.getElementById('vibe-definition').classList.remove('strikethrough');
-                    document.getElementById('first-bullet').classList.remove('reveal-bullet');
-                }
-            }
-        }
-
-        function resetSlideAnimation(slideIndex) {
-            if (slideIndex === 2) { // Slide 3: "What is Vibe Coding?"
-                slideStates[slideIndex].step = 0;
-                document.getElementById('vibe-definition').classList.remove('strikethrough');
-                document.getElementById('first-bullet').classList.remove('reveal-bullet');
-            }
-        }
 
         function nextSlide() {
             showSlide(currentSlide + 1);
@@ -724,21 +654,11 @@
                 navigateModal(e.key === 'ArrowRight' ? 1 : -1);
                 return false; // Additional prevention
             } else if (!isModalOpen) {
-                // Handle slide navigation and animations when modal is closed
+                // Only handle slide navigation when modal is closed
                 if (e.key === 'ArrowRight' || e.key === ' ') {
-                    // Temporarily disable animation for debugging
-                    // const handled = handleSlideAnimation('next');
-                    // console.log('Right arrow - Animation handled:', handled, 'Current slide:', currentSlide);
-                    // if (!handled) {
-                        nextSlide();
-                    // }
+                    nextSlide();
                 } else if (e.key === 'ArrowLeft') {
-                    // Temporarily disable animation for debugging  
-                    // const handled = handleSlideAnimation('prev');
-                    // console.log('Left arrow - Animation handled:', handled, 'Current slide:', currentSlide);
-                    // if (!handled) {
-                        previousSlide();
-                    // }
+                    previousSlide();
                 }
             }
         });
@@ -952,13 +872,6 @@
         let currentModalTool = null;
         let currentModalContext = null; // 'tools' for page 4, 'projects' for page 7
         
-        // Slide animation state
-        let slideStates = {};
-        
-        function initializeSlideStates() {
-            // Initialize slide 3 (index 2) animation state
-            slideStates[2] = { step: 0, maxSteps: 1 };
-        }
         
         // Define tool and project orders
         const toolOrder = ['claude', 'chatgpt', 'gemini', 'cursor', 'replit', 'n8n'];
