@@ -282,6 +282,31 @@
             animation: fadeIn 0.8s ease-out;
         }
 
+        /* Progressive reveal animations */
+        .strikethrough {
+            text-decoration: line-through;
+            opacity: 0.6;
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal-bullet {
+            display: block !important;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px);
+                display: none;
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+                display: block;
+            }
+        }
+
         /* Modal Styles */
         .modal {
             display: none;
@@ -431,15 +456,13 @@
         </div>
 
         <!-- Slide 3: What is Vibe Coding -->
-        <div class="slide qut-blue">
+        <div class="slide qut-blue" data-slide-index="2">
             <h2>What is Vibe Coding?</h2>
-            <div class="punchy-text">
+            <div class="punchy-text" id="vibe-definition">
                 "Collaborative coding with AI assistants to build faster and learn continuously."
             </div>
             <ul class="bullet-points">
-                <li>Write code with natural language.</li>
-                <li>Prototype, Prototype, Prototype!</li>
-                <li>Learn and reiterate as you go.</li>
+                <li id="first-bullet" style="display: none;">Write code with natural language.</li>
             </ul>
         </div>
 
@@ -596,12 +619,73 @@
         const totalSlides = slides.length;
 
         document.getElementById('total-slides').textContent = totalSlides;
+        
+        // Initialize slide animation states
+        initializeSlideStates();
 
         function showSlide(n) {
             slides[currentSlide].classList.remove('active');
             currentSlide = (n + totalSlides) % totalSlides;
             slides[currentSlide].classList.add('active');
             document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            // Reset slide animation state when changing slides
+            if (slideStates[currentSlide]) {
+                resetSlideAnimation(currentSlide);
+            }
+        }
+
+        function handleSlideAnimation(direction) {
+            const slideIndex = currentSlide;
+            
+            // Only handle animation for slide 3 (index 2)
+            if (slideIndex !== 2 || !slideStates[slideIndex]) {
+                return false; // Let normal navigation continue
+            }
+            
+            const state = slideStates[slideIndex];
+            
+            if (direction === 'next' && state.step < state.maxSteps) {
+                // Perform animation step
+                performSlideStep(slideIndex, state.step);
+                state.step++;
+                return true; // Animation handled, don't navigate
+            } else if (direction === 'prev' && state.step > 0) {
+                // Reverse animation step
+                state.step--;
+                reverseSlideStep(slideIndex, state.step);
+                return true; // Animation handled, don't navigate
+            }
+            
+            return false; // No animation, allow normal navigation
+        }
+
+        function performSlideStep(slideIndex, step) {
+            if (slideIndex === 2) { // Slide 3: "What is Vibe Coding?"
+                if (step === 0) {
+                    // Step 1: Strike through the tagline and reveal the bullet
+                    document.getElementById('vibe-definition').classList.add('strikethrough');
+                    document.getElementById('first-bullet').classList.add('reveal-bullet');
+                }
+            }
+        }
+
+        function reverseSlideStep(slideIndex, step) {
+            if (slideIndex === 2) { // Slide 3: "What is Vibe Coding?"
+                if (step === 0) {
+                    // Reverse step 1: Remove strikethrough and hide bullet
+                    document.getElementById('vibe-definition').classList.remove('strikethrough');
+                    document.getElementById('first-bullet').classList.remove('reveal-bullet');
+                }
+            }
+        }
+
+        function resetSlideAnimation(slideIndex) {
+            if (slideIndex === 2) { // Slide 3: "What is Vibe Coding?"
+                slideStates[slideIndex].step = 0;
+                document.getElementById('vibe-definition').classList.remove('strikethrough');
+                document.getElementById('first-bullet').classList.remove('reveal-bullet');
+            }
         }
 
         function nextSlide() {
@@ -612,7 +696,7 @@
             showSlide(currentSlide - 1);
         }
 
-        // Keyboard navigation - updated to handle modal state
+        // Keyboard navigation - updated to handle modal state and slide animations
         document.addEventListener('keydown', function(e) {
             const modal = document.getElementById('toolModal');
             const isModalOpen = modal && modal.style.display === 'block';
@@ -630,11 +714,15 @@
                 navigateModal(e.key === 'ArrowRight' ? 1 : -1);
                 return false; // Additional prevention
             } else if (!isModalOpen) {
-                // Only handle slide navigation when modal is closed
+                // Handle slide navigation and animations when modal is closed
                 if (e.key === 'ArrowRight' || e.key === ' ') {
-                    nextSlide();
+                    if (!handleSlideAnimation('next')) {
+                        nextSlide();
+                    }
                 } else if (e.key === 'ArrowLeft') {
-                    previousSlide();
+                    if (!handleSlideAnimation('prev')) {
+                        previousSlide();
+                    }
                 }
             }
         });
@@ -847,6 +935,14 @@
         // Modal navigation state
         let currentModalTool = null;
         let currentModalContext = null; // 'tools' for page 4, 'projects' for page 7
+        
+        // Slide animation state
+        let slideStates = {};
+        
+        function initializeSlideStates() {
+            // Initialize slide 3 (index 2) animation state
+            slideStates[2] = { step: 0, maxSteps: 1 };
+        }
         
         // Define tool and project orders
         const toolOrder = ['claude', 'chatgpt', 'gemini', 'cursor', 'replit', 'n8n'];
